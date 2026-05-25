@@ -1,6 +1,6 @@
 <?php
 session_start();
-$url = $_GET['url'] ?? 'Home';
+$url = $_GET['url'] ?? 'Login';
 
 
 // funcioni para partir una cadena
@@ -20,5 +20,3 @@ if (!empty($arrUrl[2])) {
 }
 require_once "Libraries/Core/Autoload.php";
 require_once "Libraries/Core/Load.php";
-
-?>

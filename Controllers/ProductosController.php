@@ -45,7 +45,7 @@ class ProductosController extends Controller
         }
         if ($permisoRequerido !== '' && !$this->esAdminGlobal()) {
             if (!isset($_SESSION['permisos']) || !in_array($permisoRequerido, $_SESSION['permisos'])) {
-                die("Acceso denegado: No tienes permiso para " . $permisoRequerido . ".");
+                $this->accesoDenegado("No tienes permiso para " . $permisoRequerido . ".");
             }
         }
     }

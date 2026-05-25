@@ -9,6 +9,18 @@ class Controller
         $this->views = new Views();
         $this->loadModel();
     }
+
+    protected function accesoDenegado($mensaje = "Acceso denegado")
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['access_denied_message'] = $mensaje;
+        header("Location: " . BASE_URL . "Error/accessDenied");
+        exit();
+    }
+
     public function loadModel()
     {
         $modelName = str_replace("Controller", "Model", get_class($this));  // me llega el nombre del controlador, por ejemplo: HomeController

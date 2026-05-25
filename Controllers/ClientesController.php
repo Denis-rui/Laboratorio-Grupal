@@ -47,8 +47,7 @@ class ClientesController extends Controller
 
         if ($permisoRequerido !== '' && !$this->esAdminGlobal()) {
             if (!in_array($permisoRequerido, $_SESSION['permisos'] ?? [])) {
-                die("No tienes permiso para acceder a esta sección");
-                exit();
+                $this->accesoDenegado("No tienes permiso para acceder a esta sección");
             }
         }
     }

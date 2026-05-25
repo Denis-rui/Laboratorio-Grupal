@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi proyecto MVC</title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/site.css">
 </head>
 <body>
     <?php require_once 'header.php'; ?>
