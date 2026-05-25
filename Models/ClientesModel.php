@@ -1,10 +1,9 @@
 <?php
 
-class UsersModel extends Model
-{
+class ClientesModel extends Model{
     public function __construct()
     {
         parent::__construct();
-        $this->tabla = "usuarios";
+        $this->tabla = "clientes";
     }
 }
