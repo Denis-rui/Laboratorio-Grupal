@@ -1,4 +1,4 @@
-<a href="<?= BASE_URL ?>/users/crear">Crear Usuario</a>
+<a href="<?= BASE_URL ?>users/crear">Crear Usuario</a>
 <table border="1">
     <thead>
         <tr>
