@@ -1,6 +1,6 @@
 <?php
 
-class UsersController extends Controller
+class UsuariosController extends Controller
 {
     public function index()
     {
@@ -30,7 +30,7 @@ class UsersController extends Controller
             "estado" => 1,
         ];
         if ($this->model->create($data)) {
-            header("Location: " . BASE_URL . "users/listar");
+            header("Location: " . BASE_URL . "usuarios/listar");
         } else {
             echo "Error al guardar el usuario";
         }

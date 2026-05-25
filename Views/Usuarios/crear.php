@@ -1,4 +1,4 @@
-<form action="<?= BASE_URL ?>/users/guardar" method="post">
+<form action="<?= BASE_URL ?>/usuarios/guardar" method="post">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" required>
     <label for="correo">Correo:</label>
