@@ -1,5 +1,5 @@
 <?php
-class ClientesController extends Controller
+class CategoriasController extends Controller
 {
     public function __construct()
     {
@@ -33,6 +33,6 @@ class ClientesController extends Controller
     }
 
     public function index() {
-        echo "Listado de clientes (simulado)";
+        echo "Listado de categorías (simulado)";
     }
 }
