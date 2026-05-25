@@ -2,6 +2,31 @@
 
 class LoginController extends Controller
 {
+    private function obtenerRutaPostLogin()
+    {
+        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
+        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
+        if ($rolId === 1 || strpos($rolNombre, 'admin') !== false) {
+            return 'Productos/listar';
+        }
+
+        $permisos = $_SESSION['permisos'] ?? [];
+        $rutas = [
+            'ventas.listar' => 'Ventas/listar',
+            'clientes.listar' => 'Clientes/listar',
+            'productos.listar' => 'Productos/listar',
+            'categorias.listar' => 'Categorias/listar',
+        ];
+
+        foreach ($rutas as $permiso => $ruta) {
+            if (in_array($permiso, $permisos, true)) {
+                return $ruta;
+            }
+        }
+
+        return 'Error/accessDenied';
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -14,7 +39,7 @@ class LoginController extends Controller
         }
 
         if (isset($_SESSION['user_data'])) {
-            header("Location: " . BASE_URL . "Home");
+            header("Location: " . BASE_URL . $this->obtenerRutaPostLogin());
             exit();
         }
 
@@ -44,14 +69,14 @@ class LoginController extends Controller
             }
             $_SESSION['user_data'] = $user;
 
-            $permisos = $this->model->getPermisos($user['id']);
+            $permisos = $this->model->obtenerPermisosDelUsuario($user['id']);
             $_SESSION['permisos'] = $permisos;
 
-            $rol = $this->model->getRol($user['id']);
+            $rol = $this->model->obtenerRolDelUsuario($user['id']);
             $_SESSION['rol_id'] = $rol['id'] ?? null;
             $_SESSION['rol_nombre'] = $rol['nombre'] ?? null;
 
-            header("Location: " . BASE_URL . "Home");
+            header("Location: " . BASE_URL . $this->obtenerRutaPostLogin());
             exit();
         }
 

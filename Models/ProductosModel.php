@@ -8,7 +8,7 @@ class ProductosModel extends Model
         $this->tabla = "productos";
     }
 
-    public function listarConCategoria()
+    public function obtenerProductosConCategoria()
     {
         return $this->select("productos.id, productos.nombre, categorias.nombre AS categoria, productos.precio, productos.stock, productos.estado")
             ->join("categorias", "productos.categoria_id = categorias.id")
@@ -16,7 +16,7 @@ class ProductosModel extends Model
             ->get();
     }
 
-    public function verConCategoria($id)
+    public function obtenerProductoConCategoriaPorId($id)
     {
         return $this->select("productos.id, productos.nombre, categorias.nombre AS categoria, productos.precio, productos.stock, productos.estado")
             ->join("categorias", "productos.categoria_id = categorias.id")
@@ -24,11 +24,18 @@ class ProductosModel extends Model
             ->first();
     }
 
-    public function obtenerCategorias()
+    public function obtenerProductosActivos()
     {
-        $sql = "SELECT id, nombre FROM categorias ORDER BY nombre ASC";
-        $stmt = $this->conectar()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->select("id, nombre, precio")
+            ->where(["estado" => 1])
+            ->orderBy("nombre", "ASC")
+            ->get();
+    }
+
+    public function obtenerProductoActivoPorId($id)
+    {
+        return $this->select("id, nombre, precio")
+            ->where(["id" => (int) $id, "estado" => 1])
+            ->first();
     }
 }

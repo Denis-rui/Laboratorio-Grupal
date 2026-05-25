@@ -2,6 +2,7 @@
 
 class ProductosController extends Controller
 {
+
     private function esAdminGlobal()
     {
         $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
@@ -56,13 +57,13 @@ class ProductosController extends Controller
 
     public function listar()
     {
-        $data = $this->model->listarConCategoria();
+        $data = $this->model->obtenerProductosConCategoria();
         $this->views->render($this, "listado", $data);
     }
 
     public function ver($id)
     {
-        $data = $this->model->verConCategoria((int) $id);
+        $data = $this->model->obtenerProductoConCategoriaPorId((int) $id);
         if (!$data) {
             echo "Producto no encontrado";
             return;
@@ -72,8 +73,10 @@ class ProductosController extends Controller
 
     public function crear()
     {
+        require_once "Models/CategoriasModel.php";
+        $categoriasModel = new CategoriasModel();
         $data = [
-            "categorias" => $this->model->obtenerCategorias(),
+            "categorias" => $categoriasModel->obtenerCategorias(),
         ];
         $this->views->render($this, "crear", $data);
     }
@@ -118,9 +121,11 @@ class ProductosController extends Controller
             return;
         }
 
+        require_once "Models/CategoriasModel.php";
+        $categoriasModel = new CategoriasModel();
         $data = [
             "producto" => $producto,
-            "categorias" => $this->model->obtenerCategorias(),
+            "categorias" => $categoriasModel->obtenerCategorias(),
         ];
         $this->views->render($this, "editar", $data);
     }

@@ -2,6 +2,18 @@
 
 class VentasController extends Controller
 {
+    private function clientesModel()
+    {
+        require_once "Models/ClientesModel.php";
+        return new ClientesModel();
+    }
+
+    private function productosModel()
+    {
+        require_once "Models/ProductosModel.php";
+        return new ProductosModel();
+    }
+
     private function esAdminGlobal()
     {
         $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
@@ -56,15 +68,17 @@ class VentasController extends Controller
 
     public function listar()
     {
-        $data = $this->model->listarConRelaciones();
+        $data = $this->model->obtenerVentasConRelaciones();
         $this->views->render($this, "listado", $data);
     }
 
     public function crear()
     {
+        $clientesModel = $this->clientesModel();
+        $productosModel = $this->productosModel();
         $data = [
-            "clientes" => $this->model->obtenerClientes(),
-            "productos" => $this->model->obtenerProductos(),
+            "clientes" => $clientesModel->obtenerClientesActivos(),
+            "productos" => $productosModel->obtenerProductosActivos(),
         ];
         $this->views->render($this, "crear", $data);
     }
@@ -80,7 +94,7 @@ class VentasController extends Controller
             return;
         }
 
-        $producto = $this->model->obtenerProductoPorId($productoId);
+        $producto = $this->productosModel()->obtenerProductoActivoPorId($productoId);
         if (!$producto) {
             echo "El producto seleccionado no existe";
             return;

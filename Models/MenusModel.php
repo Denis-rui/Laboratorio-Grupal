@@ -1,5 +1,6 @@
 <?php
 
+
 class MenusModel extends Model
 {
     public function __construct()
@@ -9,7 +10,7 @@ class MenusModel extends Model
         $this->primaryKey = "id";
     }
 
-    public function getMenusPorRol($rolId, $esAdmin = false)
+    public function obtenerMenusPorRol($rolId, $esAdmin = false)
     {
         if ($esAdmin) {
             return $this->select("menus.id, menus.titulo, menus.url, menus.icono")

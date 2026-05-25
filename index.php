@@ -6,7 +6,7 @@ $url = $_GET['url'] ?? 'Login';
 // funcioni para partir una cadena
 
 $arrUrl = explode('/', $url);
-$controlador = ucwords($arrUrl[0] ?? 'Home');
+$controlador = ucwords($arrUrl[0] ?? 'Login');
 $metodo = $arrUrl[1] ?? 'index';
 $parametros = "";
 

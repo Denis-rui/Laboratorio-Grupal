@@ -8,7 +8,7 @@ class VentasModel extends Model
         $this->tabla = "ventas";
     }
 
-    public function listarConRelaciones()
+    public function obtenerVentasConRelaciones()
     {
         return $this->select("ventas.id, clientes.nombre AS cliente, productos.nombre AS producto, venta_detalle.cantidad, venta_detalle.precio_unitario, ventas.fecha, ventas.total")
             ->join("clientes", "ventas.cliente_id = clientes.id")
@@ -16,31 +16,6 @@ class VentasModel extends Model
             ->join("productos", "venta_detalle.producto_id = productos.id")
             ->orderBy("ventas.id", "ASC")
             ->get();
-    }
-
-    public function obtenerClientes()
-    {
-        $sql = "SELECT id, nombre FROM clientes WHERE estado = 1 ORDER BY nombre ASC";
-        $stmt = $this->conectar()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function obtenerProductos()
-    {
-        $sql = "SELECT id, nombre, precio FROM productos WHERE estado = 1 ORDER BY nombre ASC";
-        $stmt = $this->conectar()->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function obtenerProductoPorId($id)
-    {
-        $sql = "SELECT id, nombre, precio FROM productos WHERE id = :id AND estado = 1";
-        $stmt = $this->conectar()->prepare($sql);
-        $stmt->bindValue(':id', (int)$id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function registrarVentaConDetalle($dataVenta, $dataDetalle)

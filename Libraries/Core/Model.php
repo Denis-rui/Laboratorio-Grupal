@@ -1,6 +1,6 @@
 <?php
 
-class Model extends conexion
+class Model extends Conexion
 {
     protected $tabla;
     protected $primaryKey = "id";

@@ -1,4 +1,7 @@
 <?php
+
+
+
 class LoginModel extends Model
 {
     public function __construct()
@@ -8,7 +11,7 @@ class LoginModel extends Model
         $this->primaryKey = "id";
     }
 
-    public function getPermisos($usuarioId)
+    public function obtenerPermisosDelUsuario($usuarioId)
     {
         $permisos = $this->select("p.clave_acceso")
             ->join("usuarios_roles ur", "ur.usuario_id = usuarios.id")
@@ -36,7 +39,7 @@ class LoginModel extends Model
         return password_verify($clave, $usuario['clave']) ? $usuario : null;
     }
 
-    public function getRol($usuarioId)
+    public function obtenerRolDelUsuario($usuarioId)
     {
         return $this->select("r.id, r.nombre_rol AS nombre")
             ->join("usuarios_roles ur", "ur.usuario_id = usuarios.id")

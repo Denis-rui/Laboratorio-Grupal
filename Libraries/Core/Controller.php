@@ -23,11 +23,17 @@ class Controller
 
     public function loadModel()
     {
-        $modelName = str_replace("Controller", "Model", get_class($this));  // me llega el nombre del controlador, por ejemplo: HomeController
-        $ModelPath = "Models/{$modelName}.php"; // me arma el path del modelo, por ejemplo: Models/HomeModel.php
+        $controllerName = get_class($this);
+        $modelName = str_replace("Controller", "Model", $controllerName);
+
+        if ($controllerName === "UsersController") {
+            $modelName = "UsuariosModel";
+        }
+
+        $ModelPath = "Models/{$modelName}.php";
         if (file_exists($ModelPath)) {
-            require_once $ModelPath; // si el archivo existe, lo incluyo
-            $this->model = new $modelName(); // creo una instancia del modelo y la asigno a una propiedad del controlador
+            require_once $ModelPath;
+            $this->model = new $modelName();
         }
     }
 }

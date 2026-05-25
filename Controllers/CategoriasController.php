@@ -56,13 +56,13 @@ class CategoriasController extends Controller
 
     public function listar()
     {
-        $data = $this->model->orderBy("id", "ASC")->get();
+        $data = $this->model->obtenerCategorias();
         $this->views->render($this, "listado", $data);
     }
 
     public function ver($id)
     {
-        $data = $this->model->find((int) $id);
+        $data = $this->model->obtenerCategoriaPorId((int) $id);
         if (!$data) {
             echo "Categoria no encontrada";
             return;
