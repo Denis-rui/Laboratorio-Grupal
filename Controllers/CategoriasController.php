@@ -1,38 +1,104 @@
 <?php
+
 class CategoriasController extends Controller
 {
-    public function __construct()
+    public function index()
     {
-        parent::__construct();
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
+        $this->listar();
+    }
+
+    public function listar()
+    {
+        $data = $this->model->orderBy("id", "ASC")->get();
+        $this->views->render($this, "listado", $data);
+    }
+
+    public function ver($id)
+    {
+        $data = $this->model->find((int) $id);
+        if (!$data) {
+            echo "Categoria no encontrada";
+            return;
         }
-        if (!isset($_SESSION['user_data'])) {
-            header("Location: " . BASE_URL . "Login");
-            exit();
+        $this->views->render($this, "ver", $data);
+    }
+
+    public function crear()
+    {
+        $this->views->render($this, "crear");
+    }
+
+    public function guardar()
+    {
+        $nombre = trim($_POST['nombre'] ?? '');
+        $descripcion = trim($_POST['descripcion'] ?? '');
+
+        if ($nombre === '') {
+            echo "El nombre de la categoria es obligatorio";
+            return;
         }
 
-        $url = $_GET['url'] ?? '';
-        $arrUrl = explode('/', $url);
-        $metodo = $arrUrl[1] ?? 'index';
+        $data = [
+            "nombre" => $nombre,
+            "descripcion" => $descripcion !== '' ? $descripcion : null,
+        ];
 
-        $permisoRequerido = '';
-        switch ($metodo) {
-            case 'crear': case 'guardar': $permisoRequerido = 'crear'; break;
-            case 'editar': case 'actualizar': $permisoRequerido = 'editar'; break;
-            case 'eliminar': $permisoRequerido = 'eliminar'; break;
-            case 'listar': case 'index': $permisoRequerido = 'listar'; break;
-            case 'ver': $permisoRequerido = 'ver_uno'; break;
-        }
-
-        if ($permisoRequerido !== '') {
-            if (!isset($_SESSION['permisos']) || !in_array($permisoRequerido, $_SESSION['permisos'])) {
-                die("Acceso denegado: No tienes permiso para " . $permisoRequerido . ".");
-            }
+        if ($this->model->create($data)) {
+            header("Location: " . BASE_URL . "categorias/listar");
+        } else {
+            echo "Error al guardar la categoria";
         }
     }
 
-    public function index() {
-        echo "Listado de categorías (simulado)";
+    public function editar($id)
+    {
+        $data = $this->model->find((int) $id);
+        if (!$data) {
+            echo "Categoria no encontrada";
+            return;
+        }
+        $this->views->render($this, "editar", $data);
+    }
+
+    public function actualizar()
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        $nombre = trim($_POST['nombre'] ?? '');
+        $descripcion = trim($_POST['descripcion'] ?? '');
+
+        if ($id <= 0 || $nombre === '') {
+            echo "ID y nombre de categoria son obligatorios";
+            return;
+        }
+
+        $data = [
+            "nombre" => $nombre,
+            "descripcion" => $descripcion !== '' ? $descripcion : null,
+        ];
+
+        if ($this->model->update($id, $data)) {
+            header("Location: " . BASE_URL . "categorias/listar");
+        } else {
+            echo "Error al actualizar la categoria";
+        }
+    }
+
+    public function eliminar($id)
+    {
+        $id = (int) $id;
+        if ($id <= 0) {
+            echo "ID de categoria invalido";
+            return;
+        }
+
+        try {
+            if ($this->model->delete($id)) {
+                header("Location: " . BASE_URL . "categorias/listar");
+            } else {
+                echo "No se pudo eliminar la categoria";
+            }
+        } catch (Throwable $e) {
+            echo "No se puede eliminar la categoria porque tiene productos asociados";
+        }
     }
 }
