@@ -143,7 +143,7 @@ class Model extends conexion
         return !empty($results) ? $results[0] : null;
     }
 
-    private function resetQuery()
+    public function resetQuery()
     {
         $this->select = "*";
         $this->joins = [];
