@@ -30,3 +30,5 @@ $productos = $data['productos'] ?? [];
 
     <button type="submit">Guardar</button>
 </form>
+
+<a href="<?= BASE_URL ?>Ventas/listar">Volver al listado</a>
