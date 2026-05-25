@@ -7,3 +7,5 @@
     <input type="password" id="clave" name="clave" required>
     <button type="submit">Guardar</button>
 </form>
+
+<a href="<?= BASE_URL ?>Usuarios/listar">Volver al listado</a>

@@ -7,3 +7,5 @@
     <input type="text" id="telefono" name="telefono" required>
     <button type="submit">Guardar</button>
 </form>
+
+<a href="<?= BASE_URL ?>Clientes/listar">Volver al listado</a>
