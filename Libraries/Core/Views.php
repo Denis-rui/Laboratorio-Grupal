@@ -10,6 +10,27 @@ class Views
             $contentView =  $viewPath; // Si existe, la incluye
 
             if ($useLayout) {
+                $menusNavbar = [];
+
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                if (isset($_SESSION['user_data'])) {
+                    $menusModelPath = "Models/MenusModel.php";
+
+                    if (file_exists($menusModelPath)) {
+                        require_once $menusModelPath;
+
+                        $menusModel = new MenusModel();
+                        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
+                        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
+                        $esAdmin = $rolId === 1 || strpos($rolNombre, 'admin') !== false;
+
+                        $menusNavbar = $menusModel->getMenusPorRol($rolId, $esAdmin);
+                    }
+                }
+
                 require_once "Views/Layouts/main.php"; // Luego incluye el layout principal, que es el que se encarga de mostrar la vista dentro de su estructura
             } else {
                 require_once $contentView; // Renderiza solo la vista sin el layout

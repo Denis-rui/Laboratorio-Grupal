@@ -1,6 +1,13 @@
 <?php
 class ClientesController extends Controller
 {
+    private function esAdminGlobal()
+    {
+        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
+        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
+        return $rolId === 1 || strpos($rolNombre, 'admin') !== false;
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -20,25 +27,25 @@ class ClientesController extends Controller
         switch ($metodo) {
             case 'crear':
             case 'guardar':
-                $permisoRequerido = 'crear';
+                $permisoRequerido = 'clientes.crear';
                 break;
             case 'editar':
             case 'actualizar':
-                $permisoRequerido = 'editar';
+                $permisoRequerido = 'clientes.editar';
                 break;
             case 'eliminar':
-                $permisoRequerido = 'eliminar';
+                $permisoRequerido = 'clientes.eliminar';
                 break;
             case 'listar':
             case 'index':
-                $permisoRequerido = 'listar';
+                $permisoRequerido = 'clientes.listar';
                 break;
             case 'ver':
-                $permisoRequerido = 'ver_uno';
+                $permisoRequerido = 'clientes.ver';
                 break;
         }
 
-        if ($permisoRequerido !== '') {
+        if ($permisoRequerido !== '' && !$this->esAdminGlobal()) {
             if (!in_array($permisoRequerido, $_SESSION['permisos'] ?? [])) {
                 die("No tienes permiso para acceder a esta sección");
                 exit();

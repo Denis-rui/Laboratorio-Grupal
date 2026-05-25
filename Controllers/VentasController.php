@@ -2,6 +2,13 @@
 
 class VentasController extends Controller
 {
+    private function esAdminGlobal()
+    {
+        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
+        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
+        return $rolId === 1 || strpos($rolNombre, 'admin') !== false;
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -19,24 +26,24 @@ class VentasController extends Controller
         switch ($metodo) {
             case 'crear':
             case 'guardar':
-                $permisoRequerido = 'crear';
+                $permisoRequerido = 'ventas.crear';
                 break;
             case 'editar':
             case 'actualizar':
-                $permisoRequerido = 'editar';
+                $permisoRequerido = 'ventas.editar';
                 break;
             case 'eliminar':
-                $permisoRequerido = 'eliminar';
+                $permisoRequerido = 'ventas.eliminar';
                 break;
             case 'listar':
             case 'index':
-                $permisoRequerido = 'listar';
+                $permisoRequerido = 'ventas.listar';
                 break;
             case 'ver':
-                $permisoRequerido = 'ver_uno';
+                $permisoRequerido = 'ventas.ver';
                 break;
         }
-        if ($permisoRequerido !== '') {
+        if ($permisoRequerido !== '' && !$this->esAdminGlobal()) {
             if (!isset($_SESSION['permisos']) || !in_array($permisoRequerido, $_SESSION['permisos'])) {
                 die("Acceso denegado: No tienes permiso para " . $permisoRequerido . ".");
             }

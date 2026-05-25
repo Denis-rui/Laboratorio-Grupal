@@ -2,6 +2,13 @@
 
 class CategoriasController extends Controller
 {
+    private function esAdminGlobal()
+    {
+        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
+        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
+        return $rolId === 1 || strpos($rolNombre, 'admin') !== false;
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -19,24 +26,24 @@ class CategoriasController extends Controller
         switch ($metodo) {
             case 'crear':
             case 'guardar':
-                $permisoRequerido = 'crear';
+                $permisoRequerido = 'categorias.crear';
                 break;
             case 'editar':
             case 'actualizar':
-                $permisoRequerido = 'editar';
+                $permisoRequerido = 'categorias.editar';
                 break;
             case 'eliminar':
-                $permisoRequerido = 'eliminar';
+                $permisoRequerido = 'categorias.eliminar';
                 break;
             case 'listar':
             case 'index':
-                $permisoRequerido = 'listar';
+                $permisoRequerido = 'categorias.listar';
                 break;
             case 'ver':
-                $permisoRequerido = 'ver_uno';
+                $permisoRequerido = 'categorias.ver';
                 break;
         }
-        if ($permisoRequerido !== '') {
+        if ($permisoRequerido !== '' && !$this->esAdminGlobal()) {
             if (!isset($_SESSION['permisos']) || !in_array($permisoRequerido, $_SESSION['permisos'])) {
                 die("Acceso denegado: No tienes permiso para " . $permisoRequerido . ".");
             }

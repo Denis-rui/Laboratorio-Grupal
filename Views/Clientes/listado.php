@@ -20,7 +20,7 @@
                 <td>
                     <a href="<?= BASE_URL ?>Clientes/editar/<?= $cliente['id'] ?>">Editar</a>
 
-                    <?php if (in_array('eliminar', $_SESSION['permisos'])) : ?>
+                    <?php if ((int)($_SESSION['rol_id'] ?? 0) === 1 || strpos(strtolower(trim($_SESSION['rol_nombre'] ?? '')), 'admin') !== false || in_array('clientes.eliminar', $_SESSION['permisos'] ?? [])) : ?>
                         <a href="<?= BASE_URL ?>Clientes/eliminar/<?= $cliente['id'] ?>">Eliminar</a>
                     <?php endif; ?>
                 </td>
