@@ -67,7 +67,15 @@ class LoginController extends Controller
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
+
+            session_regenerate_id(true);
+
             $_SESSION['user_data'] = $user;
+            $_SESSION['user_id'] = (int) $user['id'];
+            $_SESSION['fingerprint'] = md5(
+                ($_SERVER['HTTP_USER_AGENT'] ?? '') .
+                ($_SERVER['REMOTE_ADDR'] ?? '')
+            );
 
             $permisos = $this->model->obtenerPermisosDelUsuario($user['id']);
             $_SESSION['permisos'] = $permisos;
