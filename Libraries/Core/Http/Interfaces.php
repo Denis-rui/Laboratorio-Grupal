@@ -1,9 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Http;
 
 interface ResponseInterface
 {
+    public function getStatusCode(): int;
+
+    public function getHeaders(): array;
+
+    public function getBody(): string;
 }
 
 interface ServerRequestInterface

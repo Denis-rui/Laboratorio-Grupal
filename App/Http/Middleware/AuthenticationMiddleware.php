@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 require_once __DIR__ . '/../../../Libraries/Core/Http/Interfaces.php';
+require_once __DIR__ . '/../../../Libraries/Core/Http/Response.php';
 
 use Core\Http\MiddlewareInterface;
 use Core\Http\RequestHandlerInterface;
+use Core\Http\Response;
 use Core\Http\ResponseInterface;
 use Core\Http\ServerRequestInterface;
 
@@ -20,20 +24,19 @@ final class AuthenticationMiddleware implements MiddlewareInterface
         }
 
         if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . $this->loginUrl());
-            exit;
+            return Response::redirect($this->loginUrl());
         }
 
         // Seguridad: validar fingerprint (huella digital).
         $fingerprint = md5(
-            ($_SERVER['HTTP_USER_AGENT'] ?? '') .
-            ($_SERVER['REMOTE_ADDR'] ?? '')
+            (string) $request->getAttribute('user_agent', '') .
+            (string) $request->getAttribute('remote_addr', '')
         );
 
         if (!isset($_SESSION['fingerprint']) || $_SESSION['fingerprint'] !== $fingerprint) {
+            $_SESSION = [];
             session_destroy();
-            header('Location: ' . $this->loginUrl() . '?error=session_invalid');
-            exit;
+            return Response::redirect($this->loginUrl() . '?error=session_invalid');
         }
 
         $request = $request->withAttribute(

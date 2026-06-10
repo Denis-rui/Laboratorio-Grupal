@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Http;
 
 require_once __DIR__ . '/Interfaces.php';

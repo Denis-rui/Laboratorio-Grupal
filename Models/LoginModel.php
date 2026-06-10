@@ -28,6 +28,20 @@ class LoginModel extends Model
         return array_values(array_unique($claves));
     }
 
+    public function checkUserPermission($usuarioId, $permisoRequerido)
+    {
+        $rol = $this->obtenerRolDelUsuario((int) $usuarioId);
+        $rolId = (int) ($rol['id'] ?? 0);
+        $rolNombre = strtolower(trim($rol['nombre'] ?? ''));
+
+        if ($rolId === 1 || strpos($rolNombre, 'admin') !== false) {
+            return true;
+        }
+
+        $permisos = $this->obtenerPermisosDelUsuario((int) $usuarioId);
+        return in_array($permisoRequerido, $permisos, true);
+    }
+
     public function validarCredenciales($correo, $clave)
     {
         $usuario = $this->where(["correo" => $correo, "estado" => 1])->first();

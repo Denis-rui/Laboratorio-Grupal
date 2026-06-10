@@ -20,7 +20,7 @@
                 <td>
                     <a href="<?= BASE_URL ?>categorias/ver/<?php echo $categoria['id']; ?>">Ver</a>
                     <a href="<?= BASE_URL ?>categorias/editar/<?php echo $categoria['id']; ?>">Editar</a>
-                    <a href="<?= BASE_URL ?>categorias/eliminar/<?php echo $categoria['id']; ?>" onclick="return confirm('¿Eliminar categoria?');">Eliminar</a>
+                    <a href="<?= BASE_URL ?>categorias/eliminar/<?php echo $categoria['id']; ?>" data-confirm="¿Eliminar categoria?">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>

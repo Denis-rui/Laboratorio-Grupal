@@ -10,7 +10,7 @@
 <body>
     <h1>Error 404</h1>
     <p>La página que estás buscando no fue encontrada.</p>
-    <a href="javascript: history.go(-1)">Volver a la página anterior</a>
+    <a href="#" data-go-back>Volver a la página anterior</a>
 </body>
 
 </html>

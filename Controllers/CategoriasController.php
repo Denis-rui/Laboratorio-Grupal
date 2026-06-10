@@ -2,52 +2,9 @@
 
 class CategoriasController extends Controller
 {
-    private function esAdminGlobal()
-    {
-        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
-        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
-        return $rolId === 1 || strpos($rolNombre, 'admin') !== false;
-    }
-
     public function __construct()
     {
         parent::__construct();
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (!isset($_SESSION['user_data'])) {
-            header("Location: " . BASE_URL . "Login");
-            exit();
-        }
-        $url = $_GET['url'] ?? '';
-        $arrUrl = explode('/', $url);
-        $metodo = $arrUrl[1] ?? 'index';
-        $permisoRequerido = '';
-        switch ($metodo) {
-            case 'crear':
-            case 'guardar':
-                $permisoRequerido = 'categorias.crear';
-                break;
-            case 'editar':
-            case 'actualizar':
-                $permisoRequerido = 'categorias.editar';
-                break;
-            case 'eliminar':
-                $permisoRequerido = 'categorias.eliminar';
-                break;
-            case 'listar':
-            case 'index':
-                $permisoRequerido = 'categorias.listar';
-                break;
-            case 'ver':
-                $permisoRequerido = 'categorias.ver';
-                break;
-        }
-        if ($permisoRequerido !== '' && !$this->esAdminGlobal()) {
-            if (!isset($_SESSION['permisos']) || !in_array($permisoRequerido, $_SESSION['permisos'])) {
-                $this->accesoDenegado("No tienes permiso para " . $permisoRequerido . ".");
-            }
-        }
     }
     public function index()
     {

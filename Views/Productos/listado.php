@@ -26,7 +26,7 @@
                 <td>
                     <a href="<?= BASE_URL ?>productos/ver/<?php echo $producto['id']; ?>">Ver</a>
                     <a href="<?= BASE_URL ?>productos/editar/<?php echo $producto['id']; ?>">Editar</a>
-                    <a href="<?= BASE_URL ?>productos/eliminar/<?php echo $producto['id']; ?>" onclick="return confirm('¿Desactivar producto?');">Eliminar</a>
+                    <a href="<?= BASE_URL ?>productos/eliminar/<?php echo $producto['id']; ?>" data-confirm="¿Desactivar producto?">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
