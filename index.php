@@ -7,6 +7,7 @@ use App\Http\Middleware\AuthorizationRBACMiddleware;
 use App\Repositories\PermissionRepository;
 use Core\Http\ControllerRequestHandler;
 use Core\Http\MiddlewareDispatcher;
+use Core\Http\NativeSession;
 use Core\Http\ServerRequest;
 
 require_once 'Config/Config.php';
@@ -16,6 +17,8 @@ require_once 'Libraries/Core/Http/ServerRequest.php';
 require_once 'Libraries/Core/Http/Response.php';
 require_once 'Libraries/Core/Http/ControllerRequestHandler.php';
 require_once 'Libraries/Core/Http/MiddlewareDispatcher.php';
+require_once 'Libraries/Core/Http/SessionInterface.php';
+require_once 'Libraries/Core/Http/NativeSession.php';
 require_once 'App/Http/Middleware/AuthenticationMiddleware.php';
 require_once 'App/Http/Middleware/AuthorizationRBACMiddleware.php';
 require_once 'App/Repositories/PermissionRepository.php';
@@ -94,9 +97,10 @@ $mapaPermisos = [
 
 $handler = new ControllerRequestHandler($controlador, $metodo, $parametros);
 $dispatcher = new MiddlewareDispatcher($handler);
+$session = new NativeSession();
 
 if (!$esRutaPublica) {
-    $dispatcher->add(new AuthenticationMiddleware());
+    $dispatcher->add(new AuthenticationMiddleware($session));
 
     $permisoRequerido = $mapaPermisos[$rutaActual] ?? null;
     if ($permisoRequerido !== null) {

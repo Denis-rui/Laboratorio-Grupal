@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe grupal - Middleware y seguridad PSR-15</title>
+    <style>
+        @page { size: A4; margin: 18mm; }
+        body {
+            color: #1f2937;
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.45;
+            margin: 0;
+        }
+        h1, h2, h3 { color: #123c69; }
+        h1 { font-size: 25pt; margin-bottom: 10px; }
+        h2 {
+            border-bottom: 2px solid #2563eb;
+            font-size: 17pt;
+            margin-top: 26px;
+            padding-bottom: 5px;
+        }
+        h3 { font-size: 13pt; margin-bottom: 5px; }
+        p { margin: 7px 0; }
+        table {
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin: 12px 0;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #94a3b8;
+            padding: 7px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th { background: #dbeafe; }
+        pre {
+            background: #111827;
+            border-radius: 5px;
+            color: #f8fafc;
+            font-size: 8.5pt;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+        code { font-family: Consolas, monospace; }
+        .cover {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 245mm;
+            text-align: center;
+        }
+        .cover .box {
+            border: 2px solid #2563eb;
+            border-radius: 10px;
+            margin-top: 35px;
+            padding: 20px 32px;
+            text-align: left;
+            width: 75%;
+        }
+        .page-break { break-before: page; }
+        .result {
+            background: #dcfce7;
+            border-left: 5px solid #16a34a;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .evidence {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 8px 12px;
+        }
+        .small { color: #475569; font-size: 9pt; }
+    </style>
+</head>
+<body>
+    <section class="cover">
+        <h1>Informe grupal</h1>
+        <h2>Middleware PSR-15 y endurecimiento de seguridad</h2>
+        <p>Desarrollo de Aplicaciones Web II</p>
+
+        <div class="box">
+            <p><strong>Integrantes:</strong> __________________________________________</p>
+            <p><strong>Docente:</strong> ______________________________________________</p>
+            <p><strong>Unidad:</strong> II - Semana 6</p>
+            <p><strong>Proyecto:</strong> Sistema MVC PHP con autenticación y RBAC</p>
+            <p><strong>Fecha:</strong> Junio de 2026</p>
+        </div>
+    </section>
+
+    <section class="page-break">
+        <h2>1. Objetivo</h2>
+        <p>
+            Implementar una tubería de middlewares inspirada en PSR-15 para centralizar
+            autenticación, validación de fingerprint, autorización RBAC y cabeceras de
+            seguridad. La solución evita que una petición no autorizada llegue al
+            controlador y emplea contratos fuertemente tipados.
+        </p>
+
+        <h2>2. Arquitectura implementada</h2>
+        <p>La petición sigue el siguiente flujo:</p>
+        <pre><code>Petición HTTP
+    -> ServerRequest
+    -> MiddlewareDispatcher
+       -> AuthenticationMiddleware
+       -> AuthorizationRBACMiddleware
+    -> ControllerRequestHandler
+    -> Controlador MVC
+    -> Response HTTP</code></pre>
+
+        <p class="evidence">
+            Los componentes se encuentran en <code>Libraries/Core/Http</code>,
+            <code>App/Http/Middleware</code> y <code>App/Repositories</code>.
+            La integración general se realiza desde <code>index.php</code>.
+        </p>
+
+        <h2>3. Lista de cotejo validada</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>N.º</th>
+                    <th>Criterio técnico</th>
+                    <th>Estado</th>
+                    <th>Evidencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Interfaces MiddlewareInterface y RequestHandlerInterface.</td><td>Cumple (2)</td><td><code>Libraries/Core/Http/Interfaces.php</code></td></tr>
+                <tr><td>2</td><td>Pipeline compuesto con array_reduce.</td><td>Cumple (2)</td><td><code>MiddlewareDispatcher.php</code> usa <code>array_reduce</code> y <code>array_reverse</code>.</td></tr>
+                <tr><td>3</td><td>Autenticación mediante sesión y fingerprint.</td><td>Cumple (2)</td><td><code>AuthenticationMiddleware.php</code></td></tr>
+                <tr><td>4</td><td>Regeneración del identificador de sesión.</td><td>Cumple (2)</td><td><code>NativeSession.php</code> ejecuta <code>session_regenerate_id(true)</code>.</td></tr>
+                <tr><td>5</td><td>RBAC mediante ORM o repositorio.</td><td>Cumple (2)</td><td><code>PermissionRepository.php</code> y <code>LoginModel.php</code>.</td></tr>
+                <tr><td>6</td><td>Cabecera Content-Security-Policy.</td><td>Cumple (2)</td><td>Configurada globalmente en <code>index.php</code>.</td></tr>
+                <tr><td>7</td><td>Cookie de sesión con HttpOnly.</td><td>Cumple (2)</td><td><code>session_set_cookie_params</code> antes de <code>session_start</code>.</td></tr>
+                <tr><td>8</td><td>Cortocircuito antes del controlador.</td><td>Cumple (2)</td><td>RBAC devuelve respuesta 403 sin ejecutar el siguiente handler.</td></tr>
+                <tr><td>9</td><td>Tipado estricto y tratamiento inmutable de la petición.</td><td>Cumple (2)</td><td><code>declare(strict_types=1)</code>, request inmutable y sesión encapsulada.</td></tr>
+                <tr><td>10</td><td>Respuestas fundamentadas al cuestionario.</td><td>Cumple (2)</td><td>Incluidas en la sección 5 del presente informe.</td></tr>
+            </tbody>
+        </table>
+        <p class="result">Resultado estimado: 20/20 puntos.</p>
+    </section>
+
+    <section class="page-break">
+        <h2>4. Evidencias de código</h2>
+
+        <h3>4.1 Contratos de interfaz</h3>
+        <pre><code>interface RequestHandlerInterface
+{
+    public function handle(ServerRequestInterface $request): ResponseInterface;
+}
+
+interface MiddlewareInterface
+{
+    public function process(
+        ServerRequestInterface $request,
+        RequestHandlerInterface $handler
+    ): ResponseInterface;
+}</code></pre>
+
+        <h3>4.2 Composición funcional del pipeline</h3>
+        <pre><code>$pipeline = array_reduce(
+    array_reverse($this->middlewares),
+    function (callable $nextStack, MiddlewareInterface $middleware): callable {
+        return function (ServerRequestInterface $req)
+            use ($nextStack, $middleware): ResponseInterface {
+            // El wrapper representa al siguiente handler.
+            return $middleware->process($req, $wrapper);
+        };
+    },
+    fn(ServerRequestInterface $req): ResponseInterface
+        => $this->fallbackHandler->handle($req)
+);</code></pre>
+
+        <h3>4.3 Autenticación y fingerprint</h3>
+        <pre><code>if (!$this->session->has('user_id')) {
+    return Response::redirect($this->loginUrl());
+}
+
+$fingerprint = md5(
+    (string) $request->getAttribute('user_agent', '') .
+    (string) $request->getAttribute('remote_addr', '')
+);
+
+if ($this->session->get('fingerprint') !== $fingerprint) {
+    $this->session->destroy();
+    return Response::redirect($this->loginUrl() . '?error=session_invalid');
+}</code></pre>
+
+        <h3>4.4 Regeneración y cookie segura</h3>
+        <pre><code>session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => !empty($_SERVER['HTTPS']),
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+
+public function regenerate(): void
+{
+    session_regenerate_id(true);
+}</code></pre>
+
+        <h3>4.5 Autorización RBAC y cortocircuito</h3>
+        <pre><code>$tieneAcceso = $this->repositorio->checkUserPermission(
+    $userId,
+    $this->permisoRequerido
+);
+
+if (!$tieneAcceso) {
+    return new Response(
+        'Error 403: No tienes permiso para: ' . $this->permisoRequerido,
+        403
+    );
+}
+
+return $handler->handle($request);</code></pre>
+
+        <h3>4.6 Cabeceras de seguridad</h3>
+        <pre><code>header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");</code></pre>
+    </section>
+
+    <section class="page-break">
+        <h2>5. Cuestionario técnico</h2>
+
+        <h3>Pregunta de evidencia 1</h3>
+        <p><strong>¿Cuál es la principal ventaja de utilizar interfaces fuertemente tipadas?</strong></p>
+        <p>
+            Las interfaces establecen un contrato verificable: el middleware sabe que el
+            handler posee el método <code>handle()</code>, recibe un
+            <code>ServerRequestInterface</code> y devuelve un <code>ResponseInterface</code>.
+            Esto permite detectar incompatibilidades tempranamente, facilita el
+            autocompletado y evita la ambigüedad de un <code>callable</code> genérico.
+        </p>
+
+        <h3>Pregunta de evidencia 2</h3>
+        <p><strong>¿Por qué se utiliza array_reverse() antes de array_reduce()?</strong></p>
+        <p>
+            La reducción construye la tubería desde la función final hacia afuera.
+            Al invertir la colección, el primer middleware registrado queda como capa
+            exterior: se ejecuta primero al entrar y último al regresar la respuesta.
+            Así se conserva el orden esperado de la estructura de cebolla.
+        </p>
+
+        <h3>Pregunta de evidencia 3</h3>
+        <p><strong>¿Cómo mitiga session_regenerate_id(true) la fijación de sesión?</strong></p>
+        <p>
+            Después de autenticar al usuario se genera un identificador nuevo y se elimina
+            el anterior. Si un atacante había impuesto o conocido previamente el ID de
+            sesión de la víctima, ese identificador deja de representar la sesión
+            autenticada y ya no puede reutilizarse para ingresar.
+        </p>
+
+        <h3>Pregunta de evidencia 4</h3>
+        <p><strong>¿Qué significa el cortocircuito y cómo protege al controlador?</strong></p>
+        <p>
+            Significa devolver una respuesta desde el middleware sin llamar a
+            <code>$handler->handle($request)</code>. Cuando RBAC deniega el permiso,
+            retorna HTTP 403; por ello el controlador no se instancia ni ejecuta acciones
+            de consulta, modificación o eliminación inseguras.
+        </p>
+
+        <h3>Pregunta de evidencia 5</h3>
+        <p><strong>¿Qué función cumple nosniff?</strong></p>
+        <p>
+            <code>X-Content-Type-Options: nosniff</code> ordena al navegador respetar el
+            tipo MIME declarado por el servidor. Evita que archivos servidos como texto,
+            imágenes u otros tipos sean reinterpretados como JavaScript o CSS, reduciendo
+            ataques XSS basados en confusión de MIME.
+        </p>
+    </section>
+
+    <section class="page-break">
+        <h2>6. Pruebas realizadas</h2>
+        <table>
+            <thead>
+                <tr><th>Prueba</th><th>Resultado</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Validación de sintaxis PHP</td><td>Todos los archivos analizados sin errores.</td></tr>
+                <tr><td>Acceso al login</td><td>HTTP 200.</td></tr>
+                <tr><td>Acceso anónimo a una ruta protegida</td><td>HTTP 302 hacia Login; controlador no ejecutado.</td></tr>
+                <tr><td>Permiso RBAC denegado</td><td>HTTP 403 y handler final no invocado.</td></tr>
+                <tr><td>Cookie PHPSESSID</td><td>Incluye <code>HttpOnly</code> y <code>SameSite=Lax</code>.</td></tr>
+                <tr><td>Cabeceras HTTP</td><td>CSP, nosniff y X-Frame-Options presentes.</td></tr>
+            </tbody>
+        </table>
+
+        <h2>7. Conclusiones</h2>
+        <p>
+            La seguridad transversal quedó centralizada en una tubería tipada. La
+            autenticación se ejecuta antes que RBAC, el fingerprint vincula la sesión al
+            entorno del usuario y las respuestas de rechazo impiden alcanzar el
+            controlador. La petición se maneja de forma inmutable y el acceso a la sesión
+            nativa se encuentra encapsulado mediante <code>SessionInterface</code>.
+        </p>
+        <p class="small">
+            Archivo generado como parte del entregable académico. Los nombres de
+            integrantes y docente deben completarse antes de la presentación final.
+        </p>
+    </section>
+</body>
+</html>

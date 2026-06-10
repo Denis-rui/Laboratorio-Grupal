@@ -1,16 +1,22 @@
 <?php
 
+require_once "Libraries/Core/Http/NativeSession.php";
+
+use Core\Http\NativeSession;
+
 class LoginController extends Controller
 {
+    private NativeSession $session;
+
     private function obtenerRutaPostLogin()
     {
-        $rolNombre = strtolower(trim($_SESSION['rol_nombre'] ?? ''));
-        $rolId = (int) ($_SESSION['rol_id'] ?? 0);
+        $rolNombre = strtolower(trim((string) $this->session->get('rol_nombre', '')));
+        $rolId = (int) $this->session->get('rol_id', 0);
         if ($rolId === 1 || strpos($rolNombre, 'admin') !== false) {
             return 'Productos/listar';
         }
 
-        $permisos = $_SESSION['permisos'] ?? [];
+        $permisos = $this->session->get('permisos', []);
         $rutas = [
             'ventas.listar' => 'Ventas/listar',
             'clientes.listar' => 'Clientes/listar',
@@ -30,6 +36,7 @@ class LoginController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->session = new NativeSession();
     }
 
     public function index()
@@ -38,7 +45,7 @@ class LoginController extends Controller
             session_start();
         }
 
-        if (isset($_SESSION['user_data'])) {
+        if ($this->session->has('user_data')) {
             header("Location: " . BASE_URL . $this->obtenerRutaPostLogin());
             exit();
         }
@@ -68,21 +75,21 @@ class LoginController extends Controller
                 session_start();
             }
 
-            session_regenerate_id(true);
+            $this->session->regenerate();
 
-            $_SESSION['user_data'] = $user;
-            $_SESSION['user_id'] = (int) $user['id'];
-            $_SESSION['fingerprint'] = md5(
+            $this->session->set('user_data', $user);
+            $this->session->set('user_id', (int) $user['id']);
+            $this->session->set('fingerprint', md5(
                 ($_SERVER['HTTP_USER_AGENT'] ?? '') .
                 ($_SERVER['REMOTE_ADDR'] ?? '')
-            );
+            ));
 
             $permisos = $this->model->obtenerPermisosDelUsuario($user['id']);
-            $_SESSION['permisos'] = $permisos;
+            $this->session->set('permisos', $permisos);
 
             $rol = $this->model->obtenerRolDelUsuario($user['id']);
-            $_SESSION['rol_id'] = $rol['id'] ?? null;
-            $_SESSION['rol_nombre'] = $rol['nombre'] ?? null;
+            $this->session->set('rol_id', $rol['id'] ?? null);
+            $this->session->set('rol_nombre', $rol['nombre'] ?? null);
 
             header("Location: " . BASE_URL . $this->obtenerRutaPostLogin());
             exit();
@@ -96,7 +103,7 @@ class LoginController extends Controller
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        session_destroy();
+        $this->session->destroy();
         header("Location: " . BASE_URL . "Login");
         exit();
     }
