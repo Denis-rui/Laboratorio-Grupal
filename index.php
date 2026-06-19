@@ -90,6 +90,7 @@ $mapaPermisos = [
     'ventas/eliminar' => 'ventas.eliminar',
     'usuarios/index' => 'usuarios.listar',
     'usuarios/listar' => 'usuarios.listar',
+    'usuarios/cargarusuariosasincronico' => 'usuarios.listar',
     'usuarios/ver' => 'usuarios.ver',
     'usuarios/crear' => 'usuarios.crear',
     'usuarios/guardar' => 'usuarios.crear',

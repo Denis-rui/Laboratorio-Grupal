@@ -9,8 +9,15 @@ class UsuariosController extends Controller
 
     public function listar()
     {
-        $data = $this->model->where(["estado" => 1])->get();
-        $this->views->render($this, "listado", $data);
+        $this->views->render($this, "listadoAsync");
+    }
+
+    public function cargarUsuariosAsincronico()
+    {
+        $data = $this->model->where(["estado" => 1])->orderBy("id", "DESC")->get();
+        $json_resp = json_encode($data);
+        header('Content-Type: application/json');
+        echo $json_resp;
     }
     public function ver($id)
     {
