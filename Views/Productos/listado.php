@@ -37,7 +37,12 @@ foreach ($data as $producto) {
         aria-live="polite"></div>
 </section>
 
-<table border="1">
+<div style="margin: 1rem 0;">
+    <label for="inputBuscar">Buscar producto:</label>
+    <input type="text" id="inputBuscar" placeholder="Escribe para buscar...">
+</div>
+
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -49,7 +54,7 @@ foreach ($data as $producto) {
             <th>Acciones</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tablaProductos_body">
         <?php foreach ($data as $producto) : ?>
             <tr>
                 <td><?php echo $producto['id']; ?></td>
