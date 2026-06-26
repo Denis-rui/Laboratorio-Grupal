@@ -20,6 +20,7 @@
     <?php require_once 'footer.php'; ?>
     <script src="<?= BASE_URL ?>public/js/site.js"></script>
     <script src="<?= BASE_URL ?>public/js/filtros_productos.js" data-base-url="<?= BASE_URL ?>"></script>
+    <script src="<?= BASE_URL ?>public/js/busqueda_productos.js" data-base-url="<?= BASE_URL ?>"></script>
 </body>
 
 </html>

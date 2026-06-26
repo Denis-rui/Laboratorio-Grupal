@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (categoriaId === '') {
             limpiarFiltrosProductos('Seleccione una categoría');
+            // ── Cuando vuelve a "Todas", disparar búsqueda sin categoría ──
+            if (typeof buscarProductos === 'function') {
+                buscarProductos();
+            }
             return;
         }
 
@@ -45,6 +49,12 @@ async function cargarFiltros(categoriaId) {
         }
 
         actualizarFiltrosProductos(data.filtros || {});
+
+        // ── Disparar búsqueda al cambiar categoría ────────────────
+        if (typeof buscarProductos === 'function') {
+            buscarProductos();
+        }
+
     } catch (error) {
         console.error('Error al cargar filtros:', error);
         limpiarFiltrosProductos('Error al cargar los filtros.', true);
