@@ -10,7 +10,7 @@ class ProductosModel extends Model
 
     public function obtenerProductosConCategoria()
     {
-        return $this->select("productos.id, productos.nombre, categorias.nombre AS categoria, productos.precio, productos.stock, productos.estado")
+        return $this->select("productos.id, productos.categoria_id, productos.nombre, categorias.nombre AS categoria, productos.precio, productos.stock, productos.estado")
             ->join("categorias", "productos.categoria_id = categorias.id")
             ->orderBy("productos.id", "ASC")
             ->get();

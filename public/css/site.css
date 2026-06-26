@@ -128,6 +128,65 @@ main table {
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
+.productos-filtros {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #f9fafb;
+}
+
+.productos-filtros__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.productos-filtros__header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.productos-filtros__estado {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.productos-filtros__categoria,
+.productos-filtros__grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.productos-filtros__categoria {
+  max-width: 320px;
+  margin-bottom: 1rem;
+}
+
+.productos-filtros label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.productos-filtros select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: var(--text-main);
+  font: inherit;
+}
+
+.productos-filtros__dinamicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
 main table thead {
   background-color: #f9fafb;
   border-bottom: 1px solid var(--border-color);
