@@ -171,4 +171,21 @@ class ProductosController extends Controller
             "filtros" => $resultado
         ]);
     }
+
+    public function apiBuscar()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $q           = trim($_GET['q'] ?? '');
+        $categoriaId = (int) ($_GET['categoria_id'] ?? 0);
+        $filtros     = $_GET['filtros'] ?? [];
+
+        if (!is_array($filtros)) {
+            $filtros = [];
+        }
+
+        $productos = $this->model->buscarProductos($q, $categoriaId, $filtros);
+
+        echo json_encode($productos);
+    }
 }
