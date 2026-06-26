@@ -132,4 +132,43 @@ class ProductosController extends Controller
             echo "No se pudo eliminar el producto";
         }
     }
+
+
+    public function apiGetFiltros()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $categoriaId = (int) ($_GET['categoria_id'] ?? 0);
+
+        if ($categoriaId <= 0) {
+            http_response_code(400);
+            echo json_encode([
+                "success" => false,
+                "message" => "Debe proporcionar una categoría válida."
+            ]);
+            return;
+        }
+
+        $filtros = $this->model->obtenerFiltrosPorCategoria($categoriaId);
+
+        $resultado = [];
+
+        foreach ($filtros as $fila) {
+            $atributo = $fila['atributo'];
+            $valor = $fila['valor'];
+
+            if (!isset($resultado[$atributo])) {
+                $resultado[$atributo] = [];
+            }
+
+            if (!in_array($valor, $resultado[$atributo])) {
+                $resultado[$atributo][] = $valor;
+            }
+        }
+
+        echo json_encode([
+            "success" => true,
+            "filtros" => $resultado
+        ]);
+    }
 }

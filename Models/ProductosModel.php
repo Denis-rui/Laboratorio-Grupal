@@ -38,4 +38,24 @@ class ProductosModel extends Model
             ->where(["id" => (int) $id, "estado" => 1])
             ->first();
     }
+
+    public function obtenerFiltrosPorCategoria($categoriaId)
+    {
+        $sql = "SELECT DISTINCT
+                a.nombre AS atributo,
+                vp.valor
+            FROM productos p
+            INNER JOIN valores_productos vp
+                ON p.id = vp.producto_id
+            INNER JOIN atributos a
+                ON vp.atributo_id = a.id
+            WHERE p.categoria_id = :categoria_id
+            ORDER BY a.nombre, vp.valor";
+
+        $stmt = $this->conectar()->prepare($sql);
+        $stmt->bindValue(':categoria_id', (int)$categoriaId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

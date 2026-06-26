@@ -50,6 +50,7 @@ $rutasPublicas = [
     'login/logout',
     'error/index',
     'error/accessdenied',
+    'productos/apigetfiltros'
 ];
 
 $rutaActual = strtolower($controlador . '/' . $metodo);
@@ -94,6 +95,7 @@ $mapaPermisos = [
     'usuarios/ver' => 'usuarios.ver',
     'usuarios/crear' => 'usuarios.crear',
     'usuarios/guardar' => 'usuarios.crear',
+    'productos/apigetfiltros' => 'productos.listar',
 ];
 
 $handler = new ControllerRequestHandler($controlador, $metodo, $parametros);
