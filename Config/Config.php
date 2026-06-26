@@ -1,8 +1,8 @@
 <?php
 
-const BASE_URL = "http://localhost/DAW-II/unidad-II/semana-6/";
+const BASE_URL = "http://localhost/laboratorio-grupal/";
 
-const CONNECTION = false; // Cambia a true para usar la base de datos
+const CONNECTION = true; // Cambia a true para usar la base de datos
 const BD_HOST = "localhost";
 const DB_PORT = "3306";
 const BD_NAME = "proyecto_php";
