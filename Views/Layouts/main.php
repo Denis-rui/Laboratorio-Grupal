@@ -19,7 +19,11 @@
     </main>
     <?php require_once 'footer.php'; ?>
     <script src="<?= BASE_URL ?>public/js/site.js"></script>
-    <script src="<?= BASE_URL ?>public/js/productos_filtros.js"></script>
+<<<<<<< HEAD
+   
+=======
+    <script src="<?= BASE_URL ?>public/js/filtros_productos.js"></script>
+>>>>>>> 052f775 (Implementé la búsqueda de usuarios con Fetch)
 </body>
 
 </html>
