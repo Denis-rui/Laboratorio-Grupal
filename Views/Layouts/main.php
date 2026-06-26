@@ -19,7 +19,7 @@
     </main>
     <?php require_once 'footer.php'; ?>
     <script src="<?= BASE_URL ?>public/js/site.js"></script>
-    <script src="<?= BASE_URL ?>public/js/productos_filtros.js"></script>
+    <script src="<?= BASE_URL ?>public/js/filtros_productos.js"></script>
 </body>
 
 </html>
