@@ -1,5 +1,5 @@
 <a href="<?= BASE_URL ?>usuarios/crear">Crear Usuario</a>
-<table border="1" class="table table-striped">
+<table border="1" id="" class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
@@ -9,7 +9,7 @@
             <th>Estado</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tblUsuario_body">
 
     </tbody>
 </table>
