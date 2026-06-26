@@ -21,8 +21,8 @@ foreach ($data as $producto) {
     </div>
 
     <div class="productos-filtros__categoria">
-        <label for="filtro_categoria_id">Categoría</label>
-        <select id="filtro_categoria_id" data-productos-categoria>
+        <label for="filtro_categoria">Categoría</label>
+        <select id="filtro_categoria" name="filtro_categoria" data-productos-categoria>
             <option value="">Todas las categorías</option>
             <?php foreach ($categorias as $categoriaId => $categoriaNombre) : ?>
                 <option value="<?php echo $categoriaId; ?>"><?php echo htmlspecialchars($categoriaNombre, ENT_QUOTES, 'UTF-8'); ?></option>
@@ -31,7 +31,7 @@ foreach ($data as $producto) {
     </div>
 
     <div
-        id="contenedor-filtros-productos"
+        id="contenedor-filtros"
         class="productos-filtros__dinamicos"
         data-productos-filtros
         aria-live="polite"></div>
